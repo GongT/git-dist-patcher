@@ -15,8 +15,12 @@ patch=$(cat application/package.json | grep -E '^\s*"patchVersion":'  | sed -nE 
 [ -n "${version}" ] || die "version not set in package.json"
 [ -n "${patch}" ] || die "patchVersion not set in package.json"
 
+[ ! -e application ] && mkdir application
+
 cd application
-[ -e .git ] || die "application folder is not a git repo"
+if [ ! -e .git ]; then
+    git init .
+fi
 git add .
 git commit -m "Version: ${version} | Patch: ${patch}"
 git status
